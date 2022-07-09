@@ -67,7 +67,49 @@ vector<int> LinuxParser::Pids() {
 }
 
 // TODO: Read and return the system memory utilization
-float LinuxParser::MemoryUtilization() { return 0.0; }
+float LinuxParser::MemoryUtilization() { 
+  string line;
+  string key;
+  string value;
+  long memTotal = 0;
+  long memFree = 0;
+  long memAvail = 0;
+  long buff = 0;
+  float mem_util = 0.0;
+  std::ifstream filestream(kProcDirectory + kMeminfoFilename);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::remove(line.begin(),line.end(),' '); // Remove whitespace
+      std::remove(line.begin(),line.end(),"kB"); // Remove units
+      std::replace(line.begin(), line.end(), ':', ' '); // Format for istringstream
+      std::istringstream linestream(line);
+      while (linestream >> key >> value) {
+        // Check for key/value pairs we care about
+        if (key == "MemTotal") {
+          memTotal = stoi(value);
+          break;
+        }
+        else if (key == "MemFree") {
+          memFree = stoi(value);
+          break;
+        }
+        else if (key == "MemAvailable") {
+          memAvail = stoi(value);
+          break;
+        }
+        else if (key == "Buffers") {
+          buff = stoi(value);
+          break;
+        }
+      }
+      // Check if we have all the necessary inputs to get utilization
+      if (memTotal > 0 && memFree > 0) {
+        mem_util = ((memTotal-memFree)/memTotal)*100;
+        return mem_util;
+      }
+    }
+  }
+}
 
 // TODO: Read and return the system uptime
 long LinuxParser::UpTime() { return 0; }
