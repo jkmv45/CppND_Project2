@@ -4,6 +4,8 @@
 #include <fstream>
 #include <regex>
 #include <string>
+#include <iostream>
+#include <unistd.h>
 
 namespace LinuxParser {
 // Paths
@@ -17,6 +19,9 @@ const std::string kMeminfoFilename{"/meminfo"};
 const std::string kVersionFilename{"/version"};
 const std::string kOSPath{"/etc/os-release"};
 const std::string kPasswordPath{"/etc/passwd"};
+// Useful Strings
+const std::string unit_str = "kB";
+const long clk_tcks = sysconf(_SC_CLK_TCK);
 
 // System
 float MemoryUtilization();
@@ -52,6 +57,11 @@ std::string Ram(int pid);
 std::string Uid(int pid);
 std::string User(int pid);
 long int UpTime(int pid);
+
+// Helper Functions
+void removeChars(std::string &str, const std::string &toRemove);
+std::vector<std::string> parsePidStat(int& pid);
+
 };  // namespace LinuxParser
 
 #endif
