@@ -22,3 +22,7 @@ debug:
 .PHONY: clean
 clean:
 	rm -rf build
+
+.PHONY: test
+test:
+	g++ -std=c++17 -o test/test_parser  test/linux_parser_tester.cpp src/linux_parser.cpp -I./include

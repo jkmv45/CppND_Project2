@@ -106,7 +106,7 @@ float LinuxParser::MemoryUtilization() {
       }
       // Check if we have all the necessary inputs to get utilization
       if (memTotal > 0 && memFree > 0) {
-        mem_util = ((memTotal-memFree)/(float)memTotal)*100.0;
+        mem_util = ((memTotal-memFree)/(float)memTotal);
         break;
       }
     }
