@@ -60,8 +60,9 @@ long int UpTime(int pid);
 
 // Helper Functions
 void removeChars(std::string &str, const std::string &toRemove);
-std::vector<std::string> parsePidStat(int& pid);
-
+//std::vector<std::string> parsePidStat(int& pid);
+std::vector<std::string> parseVecStrings(std::string filepath);
+int parseByKeyName(std::string keyname, std::string filepath);
 };  // namespace LinuxParser
 
 #endif

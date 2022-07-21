@@ -9,6 +9,7 @@ int main() {
     long uptime = LinuxParser::UpTime();
     int totalproc = LinuxParser::TotalProcesses();
     int runproc = LinuxParser::RunningProcesses();
+    std::vector<std::string> cpujiffies = LinuxParser::CpuUtilization();
 
     // Find Index for VS Code based on PID (make more robust later, if needed)
     int idx = 0;
@@ -31,6 +32,13 @@ int main() {
     std::cout << "System Uptime: " << uptime << std::endl;
     std::cout << "Total Processes: " << totalproc << std::endl;
     std::cout << "Running Processes: " << runproc << std::endl;
+
+    std::cout << "CPU Jiffies: ";
+    for (std::string str : cpujiffies){
+        std::cout << str << " ";
+    }
+    std::cout << std::endl;
+
     std::cout << "Uid for First pid: " << uid << std::endl;
     std::cout << "User for First pid: " << user << std::endl;
     std::cout << "Ram for First pid: " << ram << std::endl;
