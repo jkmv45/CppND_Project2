@@ -2,6 +2,8 @@
 #define PROCESS_H
 
 #include <string>
+#include "linux_parser.h"
+
 /*
 Basic class for Process representation
 It contains relevant attributes as shown below
@@ -15,14 +17,18 @@ class Process {
   std::string Ram();                       // TODO: See src/process.cpp
   long int UpTime();                       // TODO: See src/process.cpp
   bool operator<(Process const& a) const;  // TODO: See src/process.cpp
+  bool operator==(Process const& a) const;
+  //bool operator==(int const& i) const;
 
   // Setters
-  void setCpuUtil(float cpu_util);
-  void setRamUtil(long int ram_util);
-
+  void updateUptime();
+  void updateCpuUtil();
+  void updateRamUtil();
+  
   // Contructor/destructor
-  Process(int pid, long int ut, float cpu_util, std::string name, std::string cmd, std::string ram_util) : 
-    pid_(pid), utime_(ut), cpu_util_(cpu_util), user_(name), cmd_(cmd), ram_(ram_util){};
+  //Process(int pid, long int ut, float cpu_util, std::string name, std::string cmd, std::string ram_util) : 
+  //  pid_(pid), utime_(ut), cpu_util_(cpu_util), user_(name), cmd_(cmd), ram_(ram_util){};
+  Process(int);
   ~Process(){};
 
 

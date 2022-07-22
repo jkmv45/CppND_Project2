@@ -1,8 +1,12 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
+#include <unistd.h>
+#include <cstddef>
+#include <set>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #include "process.h"
 #include "processor.h"
@@ -17,7 +21,7 @@ class System {
   int TotalProcesses();               
   int RunningProcesses();             
   std::string Kernel();               
-  std::string OperatingSystem();      
+  std::string OperatingSystem(); 
 
   // Constructor/destructor
   System();

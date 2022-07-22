@@ -6,15 +6,13 @@
 #include "linux_parser.h"
 
 using std::stof;
-using std::string;
 using std::to_string;
-using std::vector;
 
 // DONE: An example of how to read data from the filesystem
-string LinuxParser::OperatingSystem() {
-  string line;
-  string key;
-  string value;
+std::string LinuxParser::OperatingSystem() {
+  std::string line;
+  std::string key;
+  std::string value;
   std::ifstream filestream(kOSPath);
   if (filestream.is_open()) {
     while (std::getline(filestream, line)) {
@@ -35,9 +33,9 @@ string LinuxParser::OperatingSystem() {
 }
 
 // DONE: An example of how to read data from the filesystem
-string LinuxParser::Kernel() {
-  string os, version, kernel;
-  string line;
+std::string LinuxParser::Kernel() {
+  std::string os, version, kernel;
+  std::string line;
   std::ifstream stream(kProcDirectory + kVersionFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
@@ -49,15 +47,15 @@ string LinuxParser::Kernel() {
 }
 
 // BONUS: Update this to use std::filesystem
-vector<int> LinuxParser::Pids() {
-  vector<int> pids;
+std::vector<int> LinuxParser::Pids() {
+  std::vector<int> pids;
   DIR* directory = opendir(kProcDirectory.c_str());
   struct dirent* file;
   while ((file = readdir(directory)) != nullptr) {
     // Is this a directory?
     if (file->d_type == DT_DIR) {
       // Is every character of the name a digit?
-      string filename(file->d_name);
+      std::string filename(file->d_name);
       if (std::all_of(filename.begin(), filename.end(), isdigit)) {
         int pid = stoi(filename);
         pids.push_back(pid);
@@ -69,9 +67,9 @@ vector<int> LinuxParser::Pids() {
 }
 
 float LinuxParser::MemoryUtilization() { 
-  string line;
-  string key;
-  string value;
+  std::string line;
+  std::string key;
+  std::string value;
   int memTotal = 0;
   int memFree = 0;
   int memAvail = 0;
@@ -116,8 +114,8 @@ float LinuxParser::MemoryUtilization() {
 }
 
 long LinuxParser::UpTime() { 
-  string line;
-  string uptime_str;
+  std::string line;
+  std::string uptime_str;
   std::ifstream filestream(kProcDirectory + kUptimeFilename);
   if (filestream.is_open()) {
     std::getline(filestream, line);
@@ -160,7 +158,7 @@ long LinuxParser::ActiveJiffies(int pid) {
 // // TODO: Read and return the number of idle jiffies for the system
 // long LinuxParser::IdleJiffies() { return 0; }
 
-vector<string> LinuxParser::CpuUtilization() { 
+std::vector<std::string> LinuxParser::CpuUtilization() { 
   std::vector<std::string> cpu_times = parseVecStrings(kProcDirectory + kStatFilename);
   cpu_times.erase(cpu_times.begin()); // Remove "cpu" from vector
   return cpu_times;
@@ -212,9 +210,9 @@ int LinuxParser::RunningProcesses() {
   // return 0; 
 }
 
-string LinuxParser::Command(int pid) { 
-  string line;
-  string pid_str = std::to_string(pid);
+std::string LinuxParser::Command(int pid) { 
+  std::string line;
+  std::string pid_str = std::to_string(pid);
   std::ifstream filestream(kProcDirectory + pid_str + kCmdlineFilename);
   if (filestream.is_open()) {
     std::getline(filestream, line);
@@ -223,10 +221,10 @@ string LinuxParser::Command(int pid) {
   return line; 
 }
 
-string LinuxParser::Ram(int pid) { 
-  string line;
-  string key, value;
-  string pid_str = std::to_string(pid);
+std::string LinuxParser::Ram(int pid) { 
+  std::string line;
+  std::string key, value;
+  std::string pid_str = std::to_string(pid);
   std::ifstream filestream(kProcDirectory + pid_str + kStatusFilename);
   if (filestream.is_open()) {
     while (std::getline(filestream, line)) {
@@ -237,19 +235,19 @@ string LinuxParser::Ram(int pid) {
           removeChars(value, unit_str); // Get just number
           int temp = stoi(value); // Convert to number in kB
           temp = temp/1000.0; // convert to MB
-          return std::to_string(temp) + " MB";
+          return std::to_string(temp);
         }
       }
     }
     filestream.close();
   }
-  return "Unknown"; 
+  return "0"; 
 }
 
-string LinuxParser::Uid(int pid) { 
-  string line;
-  string key, value;
-  string pid_str = std::to_string(pid);
+std::string LinuxParser::Uid(int pid) { 
+  std::string line;
+  std::string key, value;
+  std::string pid_str = std::to_string(pid);
   std::ifstream filestream(kProcDirectory + pid_str + kStatusFilename);
   if (filestream.is_open()) {
     while (std::getline(filestream, line)) {
@@ -263,12 +261,12 @@ string LinuxParser::Uid(int pid) {
     }
     filestream.close();
   }
-  return string(); 
+  return std::string(); 
 }
 
-string LinuxParser::User(int pid) { 
-  string my_uid = Uid(pid);
-  string line, key, value;
+std::string LinuxParser::User(int pid) { 
+  std::string my_uid = Uid(pid);
+  std::string line, key, value;
   std::ifstream filestream(kPasswordPath);
   if (filestream.is_open()) {
     while (std::getline(filestream, line)) {
@@ -283,7 +281,7 @@ string LinuxParser::User(int pid) {
     }
     filestream.close();
   }
-  return string(); 
+  return std::string(); 
 }
 
 long LinuxParser::UpTime(int pid) { 
