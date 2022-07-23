@@ -6,6 +6,8 @@
 #include <string>
 #include <iostream>
 #include <unistd.h>
+#include <dirent.h>
+#include <vector>
 
 namespace LinuxParser {
 // Paths
@@ -46,21 +48,17 @@ enum CPUStates {
   kGuestNice_
 };
 std::vector<std::string> CpuUtilization();
-long Jiffies();
-long ActiveJiffies();
-long ActiveJiffies(int pid);
-long IdleJiffies();
 
 // Processes
 std::string Command(int pid);
 std::string Ram(int pid);
 std::string Uid(int pid);
 std::string User(int pid);
-long int UpTime(int pid);
+float ActiveCpuTime(int pid);
+long STime(int pid);
 
 // Helper Functions
 void removeChars(std::string &str, const std::string &toRemove);
-//std::vector<std::string> parsePidStat(int& pid);
 std::vector<std::string> parseVecStrings(std::string filepath);
 int parseByKeyName(std::string keyname, std::string filepath);
 };  // namespace LinuxParser

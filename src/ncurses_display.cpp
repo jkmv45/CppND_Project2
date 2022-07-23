@@ -52,12 +52,13 @@ void NCursesDisplay::DisplaySystem(System& system, WINDOW* window) {
 void NCursesDisplay::DisplayProcesses(std::vector<Process>& processes,
                                       WINDOW* window, int n) {
   int row{0};
+  int c_offset = 4; // to deconflict user name interfering with CPU%
   int const pid_column{2};
   int const user_column{9};
-  int const cpu_column{16};
-  int const ram_column{26};
-  int const time_column{35};
-  int const command_column{46};
+  int const cpu_column{16 + c_offset};
+  int const ram_column{24 + c_offset};
+  int const time_column{32 + c_offset};
+  int const command_column{42 + c_offset};
   wattron(window, COLOR_PAIR(2));
   mvwprintw(window, ++row, pid_column, "PID");
   mvwprintw(window, row, user_column, "USER");
@@ -68,15 +69,16 @@ void NCursesDisplay::DisplayProcesses(std::vector<Process>& processes,
   wattroff(window, COLOR_PAIR(2));
   int const num_processes = int(processes.size()) > n ? n : processes.size();
   for (int i = 0; i < num_processes; ++i) {
-    mvwprintw(window, ++row, pid_column, std::to_string(processes[i].Pid()).c_str());
-    mvwprintw(window, row, user_column, processes[i].User().c_str());
-    float cpu = processes[i].CpuUtilization() * 100;
+    mvwprintw(window, ++row, pid_column, std::to_string(processes.at(i).Pid()).c_str());
+    wclrtoeol(window); // Adding this line to remove artifacts when strings of smaller size overwrite longer strings
+    mvwprintw(window, row, user_column, processes.at(i).User().c_str());
+    float cpu = processes.at(i).CpuUtilization() * 100;
     mvwprintw(window, row, cpu_column, std::to_string(cpu).substr(0, 4).c_str());
-    mvwprintw(window, row, ram_column, processes[i].Ram().c_str());
+    mvwprintw(window, row, ram_column, processes.at(i).Ram().c_str());
     mvwprintw(window, row, time_column,
-              Format::ElapsedTime(processes[i].UpTime()).c_str());
+              Format::ElapsedTime(processes.at(i).UpTime()).c_str());
     mvwprintw(window, row, command_column,
-              processes[i].Command().substr(0, window->_maxx - 46).c_str());
+              processes.at(i).Command().substr(0, window->_maxx - 46).c_str());
   }
 }
 
@@ -95,13 +97,13 @@ void NCursesDisplay::Display(System& system, int n) {
     init_pair(1, COLOR_BLUE, COLOR_BLACK);
     init_pair(2, COLOR_GREEN, COLOR_BLACK);
     box(system_window, 0, 0);
-    box(process_window, 0, 0);
     DisplaySystem(system, system_window);
     DisplayProcesses(system.Processes(), process_window, n);
+    box(process_window, 0, 0); // Moved this after DisplayProcesses so the right side of the box does not get deleted
     wrefresh(system_window);
     wrefresh(process_window);
     refresh();
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
   }
   endwin();
 }

@@ -7,9 +7,8 @@
 
 class Processor {
  public:
-  float Utilization();  // TODO: See src/processor.cpp
-
-  //Processor() : actual_cpu_j(10,0), prev_cpu_j(10,0) {};
+  float Utilization();
+  long totalDiff = 0;  // For sharing with each process to calc CPU Utilzation
 
  private:
   long activeJiffies = 0;
@@ -18,10 +17,9 @@ class Processor {
   long prevIdleJiffies = 0;
   long totalCur = 0;
   long totalPrev = 0;
-  long totalDiff = 0;
   long idleDiff = 0;
+  float cpu_util = 0.0;
   std::vector<long> cpu_j = std::vector<long>(10,0);
-    std::vector<long> prev_cpu_j = std::vector<long>(10,0);
 
   // Methods
   void calcActiveJiffies();

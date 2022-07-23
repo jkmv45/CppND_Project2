@@ -6,11 +6,9 @@ float Processor::Utilization() {
     // First check to make sure we got the right number of elements out of the file.  If not, don't update anything.
     if (cpu_times.size() == num_cpu_times){
         for (int idx = 0; idx < num_cpu_times; idx++){
-            //prev_cpu_j.at(idx) = actual_cpu_j.at(idx); // update previous state
             cpu_j.at(idx) = (long)stoi(cpu_times.at(idx)); // update current state
         }
     }
-
     // Compute Active and Idle Jiffies current and previous
     prevActiveJiffies = activeJiffies;
     prevIdleJiffies = idleJiffies;
@@ -23,8 +21,10 @@ float Processor::Utilization() {
     totalDiff = totalCur - totalPrev;
     idleDiff = idleJiffies - prevIdleJiffies;
     // Calculate CPU Utilzation
-    return (totalDiff - idleDiff)/(float)totalDiff;
-    // Since utlization is a ratio of 
+    if (totalDiff != 0){
+        cpu_util = (totalDiff - idleDiff)/(float)totalDiff;
+    }
+    return cpu_util;
 }
 
 void Processor::calcActiveJiffies(){

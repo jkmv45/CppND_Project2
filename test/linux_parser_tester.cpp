@@ -47,8 +47,10 @@ int main() {
     std::cout << "Active Jiffies for First pid: " << atime_pid << std::endl;
 
     // std::cout << "*** PID List ***" << std::endl;
-    // for (int mypid : pidlist){
-    //     std::cout << "PID: " << mypid << std::endl;
-    // }
+    for (int mypid : pidlist){
+        std::string myuser = LinuxParser::User(mypid);
+        std::string myram = LinuxParser::Ram(mypid);
+        std::cout << "PID: " << mypid << "     User: " << myuser << "     Ram: " << myram << std::endl;
+    }
 
 }
