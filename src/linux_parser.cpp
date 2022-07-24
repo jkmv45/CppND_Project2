@@ -107,23 +107,6 @@ long LinuxParser::UpTime() {
   return (long)stoi(uptime_str); 
 }
 
-float LinuxParser::ActiveCpuTime(int pid) { 
-  long utime = 0;
-  long stime = 0;
-  long cutime = 0;
-  long cstime = 0;
-  std::string pid_str = std::to_string(pid);
-  std::vector<std::string> line_vec = parseVecStrings(kProcDirectory + pid_str + kStatFilename);
-  // Ensure we actually got back a non-empty vector
-  if (!line_vec.empty()){
-    utime = (long)stoi(line_vec.at(13)); // Index per Linux documentation...
-    stime = (long)stoi(line_vec.at(14));
-    cutime = (long)stoi(line_vec.at(15));
-    cstime = (long)stoi(line_vec.at(16));
-  }
-  return (float)(utime + stime + cutime + cstime)/(float)clk_tcks; 
-}
-
 std::vector<std::string> LinuxParser::CpuUtilization() { 
   std::vector<std::string> cpu_times = parseVecStrings(kProcDirectory + kStatFilename);
   // Ensure we actually got back a non-empty vector
@@ -143,6 +126,23 @@ int LinuxParser::RunningProcesses() {
   std::string keyname = "procs_running";
   std::string filepath = kProcDirectory + kStatFilename;
   return parseByKeyName(keyname, filepath);
+}
+
+float LinuxParser::ActiveCpuTime(int pid) { 
+  long utime = 0;
+  long stime = 0;
+  long cutime = 0;
+  long cstime = 0;
+  std::string pid_str = std::to_string(pid);
+  std::vector<std::string> line_vec = parseVecStrings(kProcDirectory + pid_str + kStatFilename);
+  // Ensure we actually got back a non-empty vector
+  if (!line_vec.empty()){
+    utime = (long)stoi(line_vec.at(13)); // Index per Linux documentation...
+    stime = (long)stoi(line_vec.at(14));
+    cutime = (long)stoi(line_vec.at(15));
+    cstime = (long)stoi(line_vec.at(16));
+  }
+  return (float)(utime + stime + cutime + cstime)/(float)clk_tcks; 
 }
 
 std::string LinuxParser::Command(int pid) { 

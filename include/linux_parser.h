@@ -21,7 +21,7 @@ const std::string kMeminfoFilename{"/meminfo"};
 const std::string kVersionFilename{"/version"};
 const std::string kOSPath{"/etc/os-release"};
 const std::string kPasswordPath{"/etc/passwd"};
-// Useful Strings
+// Useful Constants
 const std::string unit_str = "kB";
 const long clk_tcks = sysconf(_SC_CLK_TCK);
 
