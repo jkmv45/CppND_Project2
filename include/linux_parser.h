@@ -54,7 +54,7 @@ std::string Command(int pid);
 std::string Ram(int pid);
 std::string Uid(int pid);
 std::string User(int pid);
-float ActiveCpuTime(int pid);
+long ActiveCpuTime(int pid);
 long STime(int pid);
 
 // Helper Functions

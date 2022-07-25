@@ -19,8 +19,7 @@ float Processor::Utilization() {
     totalPrev = prevActiveJiffies + prevIdleJiffies;
     // Caluclate Differential between current and previous values
     totalDiff = totalCur - totalPrev;
-    idleDiff = idleJiffies - prevIdleJiffies;
-    // Calculate CPU Utilzation
+    idleDiff = idleJiffies - prevIdleJiffies;    // Calculate CPU Utilzation
     if (totalDiff != 0){
         cpu_util = (totalDiff - idleDiff)/(float)totalDiff;
     }

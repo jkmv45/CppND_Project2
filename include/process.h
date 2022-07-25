@@ -38,10 +38,10 @@ class Process {
 
  private:
     int pid_{0};
-    long int utime_{0};
-    long int stime_{0};
-    float cputime_{0};
-    float prev_cputime{0};
+    long utime_{0};
+    long stime_{0};
+    long cputime_{0};
+    long prev_cputime{0};
     float cpu_util_{0.0};
     std::string user_;
     std::string cmd_;

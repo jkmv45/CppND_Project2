@@ -9,7 +9,7 @@ class Processor {
  public:
   float Utilization();
   long totalDiff = 0;  // For sharing with each process to calc CPU Utilzation
-
+  
  private:
   long activeJiffies = 0;
   long idleJiffies = 0;
@@ -24,6 +24,7 @@ class Processor {
   // Methods
   void calcActiveJiffies();
   void calcIdleJiffies();
+  
 };
 
 #endif

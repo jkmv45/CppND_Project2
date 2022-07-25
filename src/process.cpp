@@ -10,7 +10,7 @@ Process::Process(int pid){
     utime_ = LinuxParser::UpTime() - stime_;
     cmd_ = LinuxParser::Command(pid);
     ram_ = LinuxParser::Ram(pid);
-    cpu_util_ = 0.0;
+    cputime_ = LinuxParser::ActiveCpuTime(pid_);
 }
 
 // Getters
@@ -37,11 +37,10 @@ void Process::updateCpuUtil(long totalDiff_j){
     prev_cputime = cputime_;
     cputime_ = LinuxParser::ActiveCpuTime(pid_);
     // Calculate change in active time
-    float cputimeDiff = std::fabs(cputime_ - prev_cputime);
+    long cputimeDiff = std::abs(cputime_ - prev_cputime);
     // Convert total CPU jiffies to seconds
-    float totalDiffsec = (float) totalDiff_j/(float)LinuxParser::clk_tcks;
-    if (totalDiffsec != 0.0){
-        cpu_util_ = cputimeDiff/totalDiffsec;
+    if (totalDiff_j != 0){
+        cpu_util_ = cputimeDiff/(float)totalDiff_j;
     }
 }
 
